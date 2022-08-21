@@ -1,6 +1,5 @@
 #requirements
 import pandas as pd
-from st_aggrid import AgGrid
 import streamlit as st
 import gspread
 from df2gspread import df2gspread as d2g
