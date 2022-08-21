@@ -8,3 +8,4 @@ google
 streamlit_echarts
 df2gspread
 mixpanel
+jetblack_tomlutils
