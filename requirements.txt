@@ -1,0 +1,10 @@
+pandas
+streamlit
+datetime
+gspread
+oauth2client
+streamlit_option_menu
+google
+streamlit_echarts
+df2gspread
+mixpanel
