@@ -9,8 +9,18 @@ from streamlit_option_menu import option_menu
 from streamlit_echarts import st_echarts
 import streamlit.components.v1 as components
 from mixpanel import Mixpanel
+import json
+import toml
 
 st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
+
+#convert toml secret to json for gcp service account key
+google_key_file.toml = st.secrets["google_key_file"]
+
+with open(google_key_file.toml) as source:
+    config = toml.loads(source.read())
+
+google_key_file = json.dumps(config)
 
 #menu of for flipper experience
 with st.sidebar:
@@ -31,7 +41,6 @@ if choose == "MeProfile":
     st.header("MeProfile")
     user_email = st.text_input("Enter email to sign in or create account")
     if user_email:
-        google_key_file = 'form_key.json'
         scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
         credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
         gc = gspread.authorize(credentials)
