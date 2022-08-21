@@ -15,13 +15,13 @@ import toml
 st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
 #convert toml secret to json for gcp service account key
-st.write("My cool secret:", st.secrets["google_key_file"])
 google_key_file = st.secrets["google_key_file"]
 
-with open(google_key_file) as source:
-    config = toml.loads(source.read())
+config = toml.loads(google_key_file.read())
 
 google_key_file = json.dumps(config)
+
+st.write("My cool secret:", google_key_file)
 
 #menu of for flipper experience
 with st.sidebar:
