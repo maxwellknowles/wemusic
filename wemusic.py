@@ -11,12 +11,12 @@ from streamlit_echarts import st_echarts
 import streamlit.components.v1 as components
 from mixpanel import Mixpanel
 import json
+from stytch import Client
 
 st.set_page_config(page_title="WeMusic Beta", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
 #grabbing secrets and google sheets credentials
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-secret = st.secrets["google_key_file"]
 credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
 spreadsheet_key = st.secrets["spreadsheet_key"]
 
@@ -37,11 +37,16 @@ genres_list = ["None","Indie","Alternative","Hip Hop","Rock","Pop","Jazz","Count
 
 if choose == "MeProfile":
     st.header("MeProfile")
-    col1, col2 = st.columns(2)
-    with col1:
-        user_email = st.text_input("Enter email to sign in or create account")
-    with col2:
-        pin = st.number_input("Please enter a pin",0)
+        user_email = st.text_input("Enter email")
+        
+        client = Client(
+        project_id=st.secrets["project_id"],
+        secret=st.secrets["secret"],
+        environment="live",
+        )
+
+        resp = client.magic_links.email.login_or_create(email=user_email)
+        
     if user_email:
         scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
         credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
@@ -93,7 +98,7 @@ if choose == "MeProfile":
             soundcloud = st.text_input("Link to Soundcloud")
 
             #artist details brought together in list
-            profile_details = [user_email, pin, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
+            profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
             profiles.loc[len(profiles)]=profile_details
 
             if st.button("Finish"):
@@ -104,8 +109,6 @@ if choose == "MeProfile":
                 user_email = user_email
         else:
             profiles_select = profiles[(profiles['email']==user_email)]
-            profiles_select = profiles_select.reset_index(drop=True)
-            profiles_select = profiles[(profiles['pin']==pin)]
             profiles_select = profiles_select.reset_index(drop=True)
             st.subheader(":musical_note: Welcome, "+profiles_select['artist_name'][0])
             col1, col2 = st.columns(2)
@@ -130,7 +133,7 @@ if choose == "MeProfile":
                         spotify = profiles_select['spotify'][0]
                         apple_music = profiles_select['apple_music'][0]
                         soundcloud = profiles_select['soundcloud'][0]
-                        profile_details = [user_email, pin, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
+                        profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
                         profiles = profiles[(profiles['email']!=user_email)]
                         profiles = profiles.reset_index(drop=True)
                         profiles.loc[len(profiles)]=profile_details
@@ -162,7 +165,7 @@ if choose == "MeProfile":
                         spotify = profiles_select['spotify'][0]
                         apple_music = profiles_select['apple_music'][0]
                         soundcloud = profiles_select['soundcloud'][0]
-                        profile_details = [user_email, pin, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
+                        profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
                         profiles = profiles[(profiles['email']!=user_email)]
                         profiles = profiles.reset_index(drop=True)
                         
