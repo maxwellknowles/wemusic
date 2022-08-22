@@ -170,12 +170,12 @@ if choose == "WeArtists":
     st.write("Just imagine — 3 artists with 1000 followers gives each of them 2000 new people to reach! We just have to work together.")
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
     try:
-            credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
-        except OSError as exc:
-            if exc.errno == 36:
-                handle_filename_too_long()
-            else:
-                raise
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
+    except OSError as exc:
+        if exc.errno == 36:
+            handle_filename_too_long()
+        else:
+            raise
     gc = gspread.authorize(credentials)
     sheet = gc.open('WeMusic')
     sheet_instance = sheet.get_worksheet(0)
