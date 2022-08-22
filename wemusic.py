@@ -37,15 +37,15 @@ genres_list = ["None","Indie","Alternative","Hip Hop","Rock","Pop","Jazz","Count
 
 if choose == "MeProfile":
     st.header("MeProfile")
-        user_email = st.text_input("Enter email")
-        
-        client = Client(
-        project_id=st.secrets["project_id"],
-        secret=st.secrets["secret"],
-        environment="live",
-        )
+    user_email = st.text_input("Enter email")
 
-        resp = client.magic_links.email.login_or_create(email=user_email)
+    client = Client(
+    project_id=st.secrets["project_id"],
+    secret=st.secrets["secret"],
+    environment="live",
+    )
+
+    resp = client.magic_links.email.login_or_create(email=user_email)
         
     if user_email:
         scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
