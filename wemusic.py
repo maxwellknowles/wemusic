@@ -14,9 +14,7 @@ import json
 st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
 #convert toml secret to json for gcp service account key
-google_key_file = st.secrets["google_key_file"]
-google_key_file = json.dumps(google_key_file, indent=4)
-st.write(google_key_file)
+google_key_file = json.dumps(st.secrets["google_key_file"], indent=4)
 
 #menu of for flipper experience
 with st.sidebar:
