@@ -40,7 +40,7 @@ if choose == "MeProfile":
             credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
         except OSError as exc:
             if exc.errno == 36:
-                handle_filename_too_long()
+                pass
             else:
                 raise
         gc = gspread.authorize(credentials)
@@ -173,7 +173,7 @@ if choose == "WeArtists":
         credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
     except OSError as exc:
         if exc.errno == 36:
-            handle_filename_too_long()
+            pass
         else:
             raise
     gc = gspread.authorize(credentials)
