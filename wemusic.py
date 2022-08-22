@@ -95,7 +95,8 @@ if choose == "MeProfile":
             if st.button("Finish"):
                 client = Client(scope=scope,creds=credentials)
                 spreadsheetname = "WeMusic"
-                spread = Spread(profiles, spreadsheetname,client = client)
+                spread = Spread(spreadsheetname,client = client)
+                spread.df_to_sheet(profiles,sheet = spreadsheetname,index = False)
                 st.success("Congrats! You may sign in now at http://localhost:8501/#meprofile")
                 user_email = user_email
         else:
@@ -130,7 +131,8 @@ if choose == "MeProfile":
                         profiles.loc[len(profiles)]=profile_details
                         client = Client(scope=scope,creds=credentials)
                         spreadsheetname = "WeMusic"
-                        spread = Spread(profiles, spreadsheetname,client = client)
+                        spread = Spread(spreadsheetname,client = client)
+                        spread.df_to_sheet(profiles,sheet = spreadsheetname,index = False)
                         st.success("Updated genres!")
                 user_email = user_email
                 st.write("Your Teammates: "+profiles_select['teammates'][0])
@@ -152,7 +154,8 @@ if choose == "MeProfile":
                         profiles.loc[len(profiles)]=profile_details
                         client = Client(scope=scope,creds=credentials)
                         spreadsheetname = "WeMusic"
-                        spread = Spread(profiles, spreadsheetname,client = client)
+                        spread = Spread(spreadsheetname,client = client)
+                        spread.df_to_sheet(profiles,sheet = spreadsheetname,index = False)
                         st.success("Updated genres!")
             with col2:
                 st.write("__Your Links__")
