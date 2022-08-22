@@ -62,58 +62,57 @@ if choose == "MeProfile":
             sheet_instance = sheet.get_worksheet(0)
             profiles = sheet_instance.get_all_records()
             profiles = pd.DataFrame.from_dict(profiles)
-            if user_email not in list(profiles['email']):
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.write("__About You__")
-                    photo = st.text_input("Paste in a link to an online photo (maybe from Spotify)")
-                    name = st.text_input("Name")
-                    pronouns = st.text_input("Pronouns")
-                    artist_name = st.text_input("Artist Name")
+            col1, col2 = st.columns(2)
+            with col1:
+                st.write("__About You__")
+                photo = st.text_input("Paste in a link to an online photo (maybe from Spotify)")
+                name = st.text_input("Name")
+                pronouns = st.text_input("Pronouns")
+                artist_name = st.text_input("Artist Name")
 
-                with col2:
-                    st.write("__Artist Details__")
+            with col2:
+                st.write("__Artist Details__")
 
-                    if 'n_influences' not in st.session_state:
-                        st.session_state.n_influences = 0
-                    influences = []
+                if 'n_influences' not in st.session_state:
+                    st.session_state.n_influences = 0
+                influences = []
 
-                    add = st.button(label="Add Influence")
-                    remove = st.button(label="Remove Influence")
+                add = st.button(label="Add Influence")
+                remove = st.button(label="Remove Influence")
 
-                    if add:
-                        st.session_state.n_influences += 1
-                        #st.experimental_rerun()
+                if add:
+                    st.session_state.n_influences += 1
+                    #st.experimental_rerun()
 
-                    if remove:
-                        st.session_state.n_influences -= 1
-                        #st.experimental_rerun()
+                if remove:
+                    st.session_state.n_influences -= 1
+                    #st.experimental_rerun()
 
-                    for i in range(st.session_state.n_influences):
-                        #add inputs here
-                        influence = st.text_input("Influence "+str(i+1), key=i) #pass index as key
-                        tup = (influence)
-                        influences.append(tup)
+                for i in range(st.session_state.n_influences):
+                    #add inputs here
+                    influence = st.text_input("Influence "+str(i+1), key=i) #pass index as key
+                    tup = (influence)
+                    influences.append(tup)
 
-                    genres = st.multiselect("Genres", genres_list)
+                genres = st.multiselect("Genres", genres_list)
 
-                    teammates = st.multiselect("Teammates", list(profiles['artist_name']))
+                teammates = st.multiselect("Teammates", list(profiles['artist_name']))
 
-                st.write("__Your Links__")
-                spotify = st.text_input("Link to Spotify")
-                apple_music = st.text_input("Link to Apple Music")
-                soundcloud = st.text_input("Link to Soundcloud")
+            st.write("__Your Links__")
+            spotify = st.text_input("Link to Spotify")
+            apple_music = st.text_input("Link to Apple Music")
+            soundcloud = st.text_input("Link to Soundcloud")
 
-                #artist details brought together in list
-                profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
-                profiles.loc[len(profiles)]=profile_details
+            #artist details brought together in list
+            profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
+            profiles.loc[len(profiles)]=profile_details
 
-                if st.button("Finish"):
-                    client = Client(scope=scope,creds=credentials)
-                    spread = Spread('WeMusic',client = client)
-                    spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
-                    st.success("Congrats! You may sign in now at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
-                    user_email = user_email
+            if st.button("Finish"):
+                client = Client(scope=scope,creds=credentials)
+                spread = Spread('WeMusic',client = client)
+                spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
+                st.success("Congrats! You may sign in now at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
+                user_email = user_email
                 
     if st.checkbox("Sign In"):
 
