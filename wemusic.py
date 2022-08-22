@@ -16,6 +16,7 @@ st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_not
 #convert toml secret to json for gcp service account key
 secrets = st.secrets["google_key_file"]
 google_key_file = json.dumps(secrets, indent=4)
+spreadsheet_key = st.secrets["spreadsheet_key"]
 
 #menu of for flipper experience
 with st.sidebar:
@@ -37,7 +38,7 @@ if choose == "MeProfile":
     user_email = st.text_input("Enter email to sign in or create account")
     if user_email:
         scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
+        credentials = service_account.Credentials.from_service_account_info(st.secrets["gcp_service_account"], scopes=["https://www.googleapis.com/auth/spreadsheets",],)
         gc = gspread.authorize(credentials)
         sheet = gc.open('WeMusic')
         sheet_instance = sheet.get_worksheet(0)
@@ -90,7 +91,6 @@ if choose == "MeProfile":
             profiles.loc[len(profiles)]=profile_details
 
             if st.button("Finish"):
-                spreadsheet_key = "1VyjzVmzmSAUO5mnosDJwZc8h7tKE-VV1WCPkzdJg-Iw"
                 wks_name1 = 'profiles'
                 d2g.upload(profiles, spreadsheet_key, wks_name1, credentials=credentials, row_names=False)
                 st.success("Congrats! You may sign in now at http://localhost:8501/#meprofile")
@@ -164,7 +164,7 @@ if choose == "WeArtists":
     st.write("Partner up with other small artists you dig and promote each other's work: __*co-promotion*__ as a substitute for algorithmic placement!")
     st.write("Just imagine — 3 artists with 1000 followers gives each of them 2000 new people to reach! We just have to work together.")
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
+    credentials = service_account.Credentials.from_service_account_info(st.secrets["gcp_service_account"], scopes=["https://www.googleapis.com/auth/spreadsheets",],)
     gc = gspread.authorize(credentials)
     sheet = gc.open('WeMusic')
     sheet_instance = sheet.get_worksheet(0)
