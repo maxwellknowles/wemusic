@@ -9,11 +9,13 @@ from streamlit_option_menu import option_menu
 from streamlit_echarts import st_echarts
 import streamlit.components.v1 as components
 from mixpanel import Mixpanel
+import json
 
 st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
 #convert toml secret to json for gcp service account key
-google_key_file = "https://raw.githubusercontent.com/maxwellknowles/form/main/form_key.json?token=GHSAT0AAAAAABVZ4E4G4PPFGO7EOKRJCXDSYYCYZ6Q"
+google_key_file = st.secrets["google_key_file"]
+google_key_file = json.dumps(google_key_file)
 
 #menu of for flipper experience
 with st.sidebar:
