@@ -135,8 +135,6 @@ if choose == "MeProfile":
                         gc = gspread.authorize(credentials)
                         sheet = gc.open('WeMusic')
                         sheet_instance = sheet.get_worksheet(0)
-                        st.write([profiles.columns.values.tolist()])
-                        st.write(profiles.values.tolist())
                         sheet_instance.update([profiles.columns.values.tolist()] + profiles.values.tolist())
                         #client = Client(scope=scope,creds=credentials)
                         #spreadsheetname = "WeMusic"
