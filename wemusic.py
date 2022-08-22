@@ -94,11 +94,9 @@ if choose == "MeProfile":
 
             if st.button("Finish"):
                 client = Client(scope=scope,creds=credentials)
-                spreadsheetname = "WeMusic"
-                spread = Spread(spreadsheetname,client = client)
-                col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
-                spread.df_to_sheet([profiles.columns.values.tolist()] + profiles.values.tolist())
-                st.success("Congrats! You may sign in now at http://localhost:8501/#meprofile")
+                spread = Spread('WeMusic',client = client)
+                spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
+                st.success("Congrats! You may sign in now at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
                 user_email = user_email
         else:
             profiles_select = profiles[(profiles['email']==user_email)]
@@ -135,7 +133,9 @@ if choose == "MeProfile":
                         gc = gspread.authorize(credentials)
                         sheet = gc.open('WeMusic')
                         sheet_instance = sheet.get_worksheet(0)
-                        sheet_instance.update([profiles.columns.values.tolist()] + profiles.values.tolist())
+                        client = Client(scope=scope,creds=credentials)
+                        spread = Spread('WeMusic',client = client)
+                        spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
                         #client = Client(scope=scope,creds=credentials)
                         #spreadsheetname = "WeMusic"
                         #spread = Spread(spreadsheetname,client = client)
@@ -162,10 +162,9 @@ if choose == "MeProfile":
                         
                         profiles.loc[len(profiles)]=profile_details
                         client = Client(scope=scope,creds=credentials)
-                        spreadsheetname = "WeMusic"
-                        spread = Spread(spreadsheetname,client = client)
-                        col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
-                        spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
+                        client = Client(scope=scope,creds=credentials)
+                        spread = Spread('WeMusic',client = client)
+                        spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
                         st.success("Updated teammates!")
             with col2:
                 st.write("__Your Links__")
