@@ -38,17 +38,22 @@ genres_list = ["None","Indie","Alternative","Hip Hop","Rock","Pop","Jazz","Count
 if choose == "MeProfile":
     st.header("MeProfile")
     
-    user_email = st.text_input("Enter email")
-        
-    if user_email:
+    if st.checkbox("Create Account"):
 
-        client = Client(
-        project_id=st.secrets["project_id"],
-        secret=st.secrets["secret"],
-        environment="live",
-        )
+        user_email = st.text_input("Enter email to sign in or create account", key=3000)
+        password = st.text_input("Enter password", key=3000)
 
-        resp = client.magic_links.email.login_or_create(email=user_email)
+        if user_email and password:
+            client = Client(
+                project_id=st.secrets["project_id"],
+                secret=st.secrets["secret"],
+                environment="live",
+            )
+
+            resp = client.passwords.create(
+                email=user_email,
+                password= password
+            )
         
         scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
         credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
@@ -109,7 +114,25 @@ if choose == "MeProfile":
                 spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
                 st.success("Congrats! You may sign in now at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
                 user_email = user_email
-        else:
+                
+        if st.checkbox("Sign In"):
+
+            user_email = st.text_input("Enter email to sign in or create account", key=3000)
+            password = st.text_input("Enter password", key=3000)
+
+        if user_email and password:
+
+            client = Client(
+                project_id=st.secrets["project_id"],
+                secret=st.secrets["secret"],
+                environment="live",
+            )
+    
+            resp = client.passwords.authenticate(
+            email=user_email,
+            password=password
+            )
+        
             profiles_select = profiles[(profiles['email']==user_email)]
             profiles_select = profiles_select.reset_index(drop=True)
             st.subheader(":musical_note: Welcome, "+profiles_select['artist_name'][0])
