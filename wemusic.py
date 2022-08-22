@@ -12,7 +12,7 @@ import streamlit.components.v1 as components
 from mixpanel import Mixpanel
 import json
 
-st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
+st.set_page_config(page_title="WeMusic Beta", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
 #grabbing secrets and google sheets credentials
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
@@ -22,7 +22,7 @@ spreadsheet_key = st.secrets["spreadsheet_key"]
 
 #menu of for flipper experience
 with st.sidebar:
-    choose = option_menu("WeMusic", ["MeProfile", "WeArtists"],
+    choose = option_menu("WeMusic Beta", ["MeProfile", "WeArtists"],
                             icons=['person-circle','people'],
                             menu_icon="music-note-beamed", default_index=1, #orientation="horizontal",
                             styles={
