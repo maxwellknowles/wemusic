@@ -37,10 +37,10 @@ genres_list = ["None","Indie","Alternative","Hip Hop","Rock","Pop","Jazz","Count
 
 if choose == "MeProfile":
     st.header("MeProfile")
+    
+    user_email = st.text_input("Enter email")
         
     if user_email:
-        
-        user_email = st.text_input("Enter email")
 
         client = Client(
         project_id=st.secrets["project_id"],
