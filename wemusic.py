@@ -40,8 +40,8 @@ if choose == "MeProfile":
     
     if st.checkbox("Create Account"):
 
-        user_email = st.text_input("Enter email to sign in or create account", key=3000)
-        password = st.text_input("Enter password", key=3000)
+        user_email = st.text_input("Enter email to sign in or create account", key=1000)
+        password = st.text_input("Enter password", key=2000)
 
         if user_email and password:
             client = Client(
@@ -118,7 +118,7 @@ if choose == "MeProfile":
     if st.checkbox("Sign In"):
 
         user_email = st.text_input("Enter email to sign in or create account", key=3000)
-        password = st.text_input("Enter password", key=3000)
+        password = st.text_input("Enter password", key=4000)
 
         if user_email and password:
 
