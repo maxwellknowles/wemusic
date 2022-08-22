@@ -38,30 +38,34 @@ genres_list = ["None","Indie","Alternative","Hip Hop","Rock","Pop","Jazz","Count
 if choose == "MeProfile":
     st.header("MeProfile")
     
-    if st.checkbox("Create Account"):
+    if not st.experimental_get_query_params():
+        user_email = st.text_input("Enter email to begin session", key=1000)
 
-        user_email = st.text_input("Enter email to sign in or create account", key=1000)
-        password = st.text_input("Enter password", key=2000)
+        if user_email:
 
-        if user_email and password:
             client = Client(
                 project_id=st.secrets["project_id"],
                 secret=st.secrets["secret"],
                 environment="live",
             )
 
-            resp = client.passwords.create(
-                email=user_email,
-                password= password
+            resp = client.magic_links.email.send(
+                email=user_email
             )
+
+            st.success("Please check your email for a magic link to sign in safely :smile:")
+
+    if st.experimental_get_query_params():
+        user_email = st.text_input("Now enter email to pull up your account data or create", key=3000)
         
-            scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-            credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
-            gc = gspread.authorize(credentials)
-            sheet = gc.open('WeMusic')
-            sheet_instance = sheet.get_worksheet(0)
-            profiles = sheet_instance.get_all_records()
-            profiles = pd.DataFrame.from_dict(profiles)
+        scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+        credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
+        gc = gspread.authorize(credentials)
+        sheet = gc.open('WeMusic')
+        sheet_instance = sheet.get_worksheet(0)
+        profiles = sheet_instance.get_all_records()
+        profiles = pd.DataFrame.from_dict(profiles)
+        if user_email not in list(profiles['email']):
             col1, col2 = st.columns(2)
             with col1:
                 st.write("__About You__")
@@ -111,27 +115,10 @@ if choose == "MeProfile":
                 client = Client(scope=scope,creds=credentials)
                 spread = Spread('WeMusic',client = client)
                 spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
-                st.success("Congrats! You may sign in now at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
+                st.success("Congrats! You can see your account at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
                 user_email = user_email
                 
-    if st.checkbox("Sign In"):
-
-        user_email = st.text_input("Enter email to sign in or create account", key=3000)
-        password = st.text_input("Enter password", key=4000)
-
-        if user_email and password:
-
-            client = Client(
-                project_id=st.secrets["project_id"],
-                secret=st.secrets["secret"],
-                environment="live",
-            )
-    
-            resp = client.passwords.authenticate(
-            email=user_email,
-            password=password
-            )
-        
+        else: 
             profiles_select = profiles[(profiles['email']==user_email)]
             profiles_select = profiles_select.reset_index(drop=True)
             st.subheader(":musical_note: Welcome, "+profiles_select['artist_name'][0])
@@ -169,13 +156,7 @@ if choose == "MeProfile":
                         client = Client(scope=scope,creds=credentials)
                         spread = Spread('WeMusic',client = client)
                         spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
-                        #client = Client(scope=scope,creds=credentials)
-                        #spreadsheetname = "WeMusic"
-                        #spread = Spread(spreadsheetname,client = client)
-                        #col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
-                        #spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
                         st.success("Updated genres!")
-                user_email = user_email
                 st.write("Your Teammates: "+profiles_select['teammates'][0])
                 with st.expander("Edit Teammates"):
                     teammates = st.multiselect("Teammates", list(profiles['artist_name']))
