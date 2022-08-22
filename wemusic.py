@@ -136,7 +136,7 @@ if choose == "MeProfile":
                         sheet = gc.open('WeMusic')
                         sheet_instance = sheet.get_worksheet(0)
                         col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
-                        sheet_instance.update(col + profiles.values.tolist())
+                        sheet_instance.update([profiles.columns.values.tolist()] + profiles.values.tolist())
                         #client = Client(scope=scope,creds=credentials)
                         #spreadsheetname = "WeMusic"
                         #spread = Spread(spreadsheetname,client = client)
