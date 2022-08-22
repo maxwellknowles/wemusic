@@ -3,6 +3,7 @@ import pandas as pd
 import streamlit as st
 import gspread
 from df2gspread import df2gspread as d2g
+from gspread_pandas import Spread,Client
 from oauth2client.service_account import ServiceAccountCredentials
 from google.oauth2 import service_account
 from streamlit_option_menu import option_menu
@@ -13,7 +14,10 @@ import json
 
 st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
-#convert toml secret to json for gcp service account key
+#grabbing secrets and google sheets credentials
+scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+secret = st.secrets["google_key_file"]
+credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
 spreadsheet_key = st.secrets["spreadsheet_key"]
 
 #menu of for flipper experience
@@ -89,10 +93,9 @@ if choose == "MeProfile":
             profiles.loc[len(profiles)]=profile_details
 
             if st.button("Finish"):
-                wks_name1 = 'profiles'
-                scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-                credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
-                d2g.upload(profiles, spreadsheet_key, wks_name1, credentials=credentials, row_names=False)
+                client = Client(scope=scope,creds=credentials)
+                spreadsheetname = "WeMusic"
+                spread = Spread(profiles, spreadsheetname,client = client)
                 st.success("Congrats! You may sign in now at http://localhost:8501/#meprofile")
                 user_email = user_email
         else:
@@ -125,8 +128,9 @@ if choose == "MeProfile":
                         profiles = profiles[(profiles['email']!=user_email)]
                         profiles = profiles.reset_index(drop=True)
                         profiles.loc[len(profiles)]=profile_details
-                        wks_name1 = 'profiles'
-                        d2g.upload(profiles, spreadsheet_key, wks_name1, credentials=credentials, row_names=False)
+                        client = Client(scope=scope,creds=credentials)
+                        spreadsheetname = "WeMusic"
+                        spread = Spread(profiles, spreadsheetname,client = client)
                         st.success("Updated genres!")
                 user_email = user_email
                 st.write("Your Teammates: "+profiles_select['teammates'][0])
@@ -146,8 +150,9 @@ if choose == "MeProfile":
                         profiles = profiles[(profiles['email']!=user_email)]
                         profiles = profiles.reset_index(drop=True)
                         profiles.loc[len(profiles)]=profile_details
-                        wks_name1 = 'profiles'
-                        d2g.upload(profiles, spreadsheet_key, wks_name1, credentials=credentials, row_names=False)
+                        client = Client(scope=scope,creds=credentials)
+                        spreadsheetname = "WeMusic"
+                        spread = Spread(profiles, spreadsheetname,client = client)
                         st.success("Updated genres!")
             with col2:
                 st.write("__Your Links__")
