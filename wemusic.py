@@ -14,6 +14,7 @@ import json
 st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
 #convert toml secret to json for gcp service account key
+google_key_file = {}
 dictionary = st.secrets["google_key_file"]
 with open("google_key_file", "w") as outfile:
     json.dump(dictionary, google_key_file)
