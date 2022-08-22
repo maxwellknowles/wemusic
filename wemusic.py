@@ -65,126 +65,127 @@ if choose == "MeProfile":
         sheet_instance = sheet.get_worksheet(0)
         profiles = sheet_instance.get_all_records()
         profiles = pd.DataFrame.from_dict(profiles)
-        if user_email not in list(profiles['email']):
-            col1, col2 = st.columns(2)
-            with col1:
-                st.write("__About You__")
-                photo = st.text_input("Paste in a link to an online photo (maybe from Spotify)")
-                name = st.text_input("Name")
-                pronouns = st.text_input("Pronouns")
-                artist_name = st.text_input("Artist Name")
+        if user_email:
+            if user_email not in list(profiles['email']):
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.write("__About You__")
+                    photo = st.text_input("Paste in a link to an online photo (maybe from Spotify)")
+                    name = st.text_input("Name")
+                    pronouns = st.text_input("Pronouns")
+                    artist_name = st.text_input("Artist Name")
 
-            with col2:
-                st.write("__Artist Details__")
+                with col2:
+                    st.write("__Artist Details__")
 
-                if 'n_influences' not in st.session_state:
-                    st.session_state.n_influences = 0
-                influences = []
+                    if 'n_influences' not in st.session_state:
+                        st.session_state.n_influences = 0
+                    influences = []
 
-                add = st.button(label="Add Influence")
-                remove = st.button(label="Remove Influence")
+                    add = st.button(label="Add Influence")
+                    remove = st.button(label="Remove Influence")
 
-                if add:
-                    st.session_state.n_influences += 1
-                    #st.experimental_rerun()
+                    if add:
+                        st.session_state.n_influences += 1
+                        #st.experimental_rerun()
 
-                if remove:
-                    st.session_state.n_influences -= 1
-                    #st.experimental_rerun()
+                    if remove:
+                        st.session_state.n_influences -= 1
+                        #st.experimental_rerun()
 
-                for i in range(st.session_state.n_influences):
-                    #add inputs here
-                    influence = st.text_input("Influence "+str(i+1), key=i) #pass index as key
-                    tup = (influence)
-                    influences.append(tup)
+                    for i in range(st.session_state.n_influences):
+                        #add inputs here
+                        influence = st.text_input("Influence "+str(i+1), key=i) #pass index as key
+                        tup = (influence)
+                        influences.append(tup)
 
-                genres = st.multiselect("Genres", genres_list)
-
-                teammates = st.multiselect("Teammates", list(profiles['artist_name']))
-
-            st.write("__Your Links__")
-            spotify = st.text_input("Link to Spotify")
-            apple_music = st.text_input("Link to Apple Music")
-            soundcloud = st.text_input("Link to Soundcloud")
-
-            #artist details brought together in list
-            profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
-            profiles.loc[len(profiles)]=profile_details
-
-            if st.button("Finish"):
-                client = Client(scope=scope,creds=credentials)
-                spread = Spread('WeMusic',client = client)
-                spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
-                st.success("Congrats! You can see your account at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
-                user_email = user_email
-                
-        else: 
-            profiles_select = profiles[(profiles['email']==user_email)]
-            profiles_select = profiles_select.reset_index(drop=True)
-            st.subheader(":musical_note: Welcome, "+profiles_select['artist_name'][0])
-            col1, col2 = st.columns(2)
-            with col1:
-                st.image(profiles_select['photo'][0])
-                st.write("__About You__")
-                st.write("Name: "+profiles_select['name'][0])
-                st.write("Pronouns: "+profiles_select['pronouns'][0])
-                st.write("Artist Name: "+profiles_select['artist_name'][0])
-                st.write("__Artist Details__")
-                st.write("Influences: "+profiles_select['influences'][0])
-                st.write("Genres: "+profiles_select['genres'][0])
-                with st.expander("Edit Genres"):
                     genres = st.multiselect("Genres", genres_list)
-                    if st.button("Complete Genre Edits"):
-                        name = profiles_select['name'][0]
-                        pronouns = profiles_select['pronouns'][0]
-                        artist_name = profiles_select['artist_name'][0]
-                        influences = profiles_select['influences'][0]
-                        teammates = profiles_select['teammates'][0]
-                        photo = profiles_select['photo'][0]
-                        spotify = profiles_select['spotify'][0]
-                        apple_music = profiles_select['apple_music'][0]
-                        soundcloud = profiles_select['soundcloud'][0]
-                        profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
-                        profiles = profiles[(profiles['email']!=user_email)]
-                        profiles = profiles.reset_index(drop=True)
-                        profiles.loc[len(profiles)]=profile_details
-                        scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-                        credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
-                        gc = gspread.authorize(credentials)
-                        sheet = gc.open('WeMusic')
-                        sheet_instance = sheet.get_worksheet(0)
-                        client = Client(scope=scope,creds=credentials)
-                        spread = Spread('WeMusic',client = client)
-                        spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
-                        st.success("Updated genres!")
-                st.write("Your Teammates: "+profiles_select['teammates'][0])
-                with st.expander("Edit Teammates"):
+
                     teammates = st.multiselect("Teammates", list(profiles['artist_name']))
-                    if st.button("Complete Teammate Edits"):
-                        name = profiles_select['name'][0]
-                        pronouns = profiles_select['pronouns'][0]
-                        artist_name = profiles_select['artist_name'][0]
-                        influences = profiles_select['influences'][0]
-                        genres = profiles_select['genres'][0]
-                        photo = profiles_select['photo'][0]
-                        spotify = profiles_select['spotify'][0]
-                        apple_music = profiles_select['apple_music'][0]
-                        soundcloud = profiles_select['soundcloud'][0]
-                        profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
-                        profiles = profiles[(profiles['email']!=user_email)]
-                        profiles = profiles.reset_index(drop=True)
-                        
-                        profiles.loc[len(profiles)]=profile_details
-                        client = Client(scope=scope,creds=credentials)
-                        client = Client(scope=scope,creds=credentials)
-                        spread = Spread('WeMusic',client = client)
-                        spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
-                        st.success("Updated teammates!")
-            with col2:
+
                 st.write("__Your Links__")
-                st.write("Spotify: "+profiles_select['spotify'][0])
-                st.write("Apple Music: "+profiles_select['apple_music'][0])
-                st.write("SoundCloud: "+profiles_select['soundcloud'][0])
+                spotify = st.text_input("Link to Spotify")
+                apple_music = st.text_input("Link to Apple Music")
+                soundcloud = st.text_input("Link to Soundcloud")
+
+                #artist details brought together in list
+                profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
+                profiles.loc[len(profiles)]=profile_details
+
+                if st.button("Finish"):
+                    client = Client(scope=scope,creds=credentials)
+                    spread = Spread('WeMusic',client = client)
+                    spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
+                    st.success("Congrats! You can see your account at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
+                    user_email = user_email
+
+            else: 
+                profiles_select = profiles[(profiles['email']==user_email)]
+                profiles_select = profiles_select.reset_index(drop=True)
+                st.subheader(":musical_note: Welcome, "+profiles_select['artist_name'][0])
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.image(profiles_select['photo'][0])
+                    st.write("__About You__")
+                    st.write("Name: "+profiles_select['name'][0])
+                    st.write("Pronouns: "+profiles_select['pronouns'][0])
+                    st.write("Artist Name: "+profiles_select['artist_name'][0])
+                    st.write("__Artist Details__")
+                    st.write("Influences: "+profiles_select['influences'][0])
+                    st.write("Genres: "+profiles_select['genres'][0])
+                    with st.expander("Edit Genres"):
+                        genres = st.multiselect("Genres", genres_list)
+                        if st.button("Complete Genre Edits"):
+                            name = profiles_select['name'][0]
+                            pronouns = profiles_select['pronouns'][0]
+                            artist_name = profiles_select['artist_name'][0]
+                            influences = profiles_select['influences'][0]
+                            teammates = profiles_select['teammates'][0]
+                            photo = profiles_select['photo'][0]
+                            spotify = profiles_select['spotify'][0]
+                            apple_music = profiles_select['apple_music'][0]
+                            soundcloud = profiles_select['soundcloud'][0]
+                            profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
+                            profiles = profiles[(profiles['email']!=user_email)]
+                            profiles = profiles.reset_index(drop=True)
+                            profiles.loc[len(profiles)]=profile_details
+                            scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+                            credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
+                            gc = gspread.authorize(credentials)
+                            sheet = gc.open('WeMusic')
+                            sheet_instance = sheet.get_worksheet(0)
+                            client = Client(scope=scope,creds=credentials)
+                            spread = Spread('WeMusic',client = client)
+                            spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
+                            st.success("Updated genres!")
+                    st.write("Your Teammates: "+profiles_select['teammates'][0])
+                    with st.expander("Edit Teammates"):
+                        teammates = st.multiselect("Teammates", list(profiles['artist_name']))
+                        if st.button("Complete Teammate Edits"):
+                            name = profiles_select['name'][0]
+                            pronouns = profiles_select['pronouns'][0]
+                            artist_name = profiles_select['artist_name'][0]
+                            influences = profiles_select['influences'][0]
+                            genres = profiles_select['genres'][0]
+                            photo = profiles_select['photo'][0]
+                            spotify = profiles_select['spotify'][0]
+                            apple_music = profiles_select['apple_music'][0]
+                            soundcloud = profiles_select['soundcloud'][0]
+                            profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
+                            profiles = profiles[(profiles['email']!=user_email)]
+                            profiles = profiles.reset_index(drop=True)
+
+                            profiles.loc[len(profiles)]=profile_details
+                            client = Client(scope=scope,creds=credentials)
+                            client = Client(scope=scope,creds=credentials)
+                            spread = Spread('WeMusic',client = client)
+                            spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
+                            st.success("Updated teammates!")
+                with col2:
+                    st.write("__Your Links__")
+                    st.write("Spotify: "+profiles_select['spotify'][0])
+                    st.write("Apple Music: "+profiles_select['apple_music'][0])
+                    st.write("SoundCloud: "+profiles_select['soundcloud'][0])
 
 if choose == "WeArtists":
     st.header("WeArtists")
