@@ -163,7 +163,6 @@ if choose == "WeArtists":
     st.write("Don't have thousands of followers or monthly listeners? Not getting recommended on streaming platforms?")
     st.write("Partner up with other small artists you dig and promote each other's work: __*co-promotion*__ as a substitute for algorithmic placement!")
     st.write("Just imagine — 3 artists with 1000 followers gives each of them 2000 new people to reach! We just have to work together.")
-    google_key_file = 'form_key.json'
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
     credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
     gc = gspread.authorize(credentials)
