@@ -38,7 +38,7 @@ if choose == "MeProfile":
     user_email = st.text_input("Enter email to sign in or create account")
     if user_email:
         scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-        credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope],)
+        credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
         gc = gspread.authorize(credentials)
         sheet = gc.open('WeMusic')
         sheet_instance = sheet.get_worksheet(0)
