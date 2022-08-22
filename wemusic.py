@@ -25,6 +25,7 @@ google_key_file = {"type":st.secrets["google_key_file"]["type"],
                   "token_uri":st.secrets["google_key_file"]["token_uri"],
                   "auth_provider_x509_cert_url":st.secrets["google_key_file"]["auth_provider_x509_cert_url"],
                   "client_x509_cert_url":st.secrets["google_key_file"]["client_x509_cert_url"]}
+st.write(google_key_file)
 
 
 #menu of for flipper experience
