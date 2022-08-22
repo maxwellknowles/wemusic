@@ -94,7 +94,7 @@ if choose == "MeProfile":
 
             if st.button("Finish"):
                 client = Client(scope=scope,creds=credentials)
-                spreadsheetname = "profiles"
+                spreadsheetname = "WeMusic"
                 spread = Spread(spreadsheetname,client = client)
                 col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
                 spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
@@ -117,7 +117,7 @@ if choose == "MeProfile":
                 with st.expander("Edit Genres"):
                     genres = st.multiselect("Genres", genres_list)
                     if st.button("Complete Genre Edits"):
-                        name = profiles_select['influences'][0]
+                        name = profiles_select['name'][0]
                         pronouns = profiles_select['pronouns'][0]
                         artist_name = profiles_select['artist_name'][0]
                         influences = profiles_select['influences'][0]
@@ -131,7 +131,7 @@ if choose == "MeProfile":
                         profiles = profiles.reset_index(drop=True)
                         profiles.loc[len(profiles)]=profile_details
                         client = Client(scope=scope,creds=credentials)
-                        spreadsheetname = "profiles"
+                        spreadsheetname = "WeMusic"
                         spread = Spread(spreadsheetname,client = client)
                         col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
                         spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
@@ -141,7 +141,7 @@ if choose == "MeProfile":
                 with st.expander("Edit Teammates"):
                     teammates = st.multiselect("Teammates", list(profiles['artist_name']))
                     if st.button("Complete Teammate Edits"):
-                        name = profiles_select['influences'][0]
+                        name = profiles_select['name'][0]
                         pronouns = profiles_select['pronouns'][0]
                         artist_name = profiles_select['artist_name'][0]
                         influences = profiles_select['influences'][0]
@@ -155,7 +155,7 @@ if choose == "MeProfile":
                         profiles = profiles.reset_index(drop=True)
                         profiles.loc[len(profiles)]=profile_details
                         client = Client(scope=scope,creds=credentials)
-                        spreadsheetname = "profiles"
+                        spreadsheetname = "WeMusic"
                         spread = Spread(spreadsheetname,client = client)
                         col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
                         spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
