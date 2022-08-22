@@ -97,7 +97,7 @@ if choose == "MeProfile":
                 spreadsheetname = "WeMusic"
                 spread = Spread(spreadsheetname,client = client)
                 col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
-                spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
+                spread.df_to_sheet([profiles.columns.values.tolist()] + profiles.values.tolist())
                 st.success("Congrats! You may sign in now at http://localhost:8501/#meprofile")
                 user_email = user_email
         else:
