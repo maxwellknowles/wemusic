@@ -135,7 +135,8 @@ if choose == "MeProfile":
                         gc = gspread.authorize(credentials)
                         sheet = gc.open('WeMusic')
                         sheet_instance = sheet.get_worksheet(0)
-                        sheet_instance.update(profiles)
+                        col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
+                        sheet_instance.update(col + profiles.values.tolist())
                         #client = Client(scope=scope,creds=credentials)
                         #spreadsheetname = "WeMusic"
                         #spread = Spread(spreadsheetname,client = client)
@@ -166,7 +167,7 @@ if choose == "MeProfile":
                         spread = Spread(spreadsheetname,client = client)
                         col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
                         spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
-                        st.success("Updated genres!")
+                        st.success("Updated teammates!")
             with col2:
                 st.write("__Your Links__")
                 st.write("Spotify: "+profiles_select['spotify'][0])
