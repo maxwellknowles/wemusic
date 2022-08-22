@@ -130,11 +130,17 @@ if choose == "MeProfile":
                         profiles = profiles[(profiles['email']!=user_email)]
                         profiles = profiles.reset_index(drop=True)
                         profiles.loc[len(profiles)]=profile_details
-                        client = Client(scope=scope,creds=credentials)
-                        spreadsheetname = "WeMusic"
-                        spread = Spread(spreadsheetname,client = client)
-                        col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
-                        spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
+                        scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+                        credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
+                        gc = gspread.authorize(credentials)
+                        sheet = gc.open('WeMusic')
+                        sheet_instance = sheet.get_worksheet(0)
+                        sheet_instance.update(profiles)
+                        #client = Client(scope=scope,creds=credentials)
+                        #spreadsheetname = "WeMusic"
+                        #spread = Spread(spreadsheetname,client = client)
+                        #col = ['user_email', 'name', 'pronouns', 'artist_name', 'influences', 'genres', 'teammates', 'photo', 'spotify', 'apple_music', 'soundcloud']
+                        #spread.df_to_sheet(profiles[col],sheet = spreadsheetname,index = False)
                         st.success("Updated genres!")
                 user_email = user_email
                 st.write("Your Teammates: "+profiles_select['teammates'][0])
@@ -153,6 +159,7 @@ if choose == "MeProfile":
                         profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
                         profiles = profiles[(profiles['email']!=user_email)]
                         profiles = profiles.reset_index(drop=True)
+                        
                         profiles.loc[len(profiles)]=profile_details
                         client = Client(scope=scope,creds=credentials)
                         spreadsheetname = "WeMusic"
