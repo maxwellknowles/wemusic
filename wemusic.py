@@ -209,10 +209,10 @@ if choose == "WeArtists":
         col1, col2 = st.columns([1,3], gap="medium")
 
         with col1:
-            if profiles_filter['photo'][i]==None:
-                pass
-            else:
+            try:
                 st.image(profiles_filter['photo'][i])
+            except FileNotFoundError:
+                pass
             st.write(profiles_filter['artist_name'][i])
         with col2:
                 with st.expander("Profile: "+profiles_filter['artist_name'][i]):
