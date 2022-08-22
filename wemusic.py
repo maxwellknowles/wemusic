@@ -15,16 +15,7 @@ st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_not
 
 #convert toml secret to json for gcp service account key
 secrets = st.secrets["google_key_file"]
-google_key_file = st.json({"type":st.secrets["google_key_file"]["type"],
-                  "project_id":st.secrets["google_key_file"]["project_id"],
-                  "private_key_id":st.secrets["google_key_file"]["private_key_id"],
-                  "private_key":st.secrets["google_key_file"]["private_key"],
-                  "client_email":st.secrets["google_key_file"]["client_email"],
-                  "client_id":st.secrets["google_key_file"]["client_id"],
-                  "auth_uri":st.secrets["google_key_file"]["auth_uri"],
-                  "token_uri":st.secrets["google_key_file"]["token_uri"],
-                  "auth_provider_x509_cert_url":st.secrets["google_key_file"]["auth_provider_x509_cert_url"],
-                  "client_x509_cert_url":st.secrets["google_key_file"]["client_x509_cert_url"]})
+google_key_file = json.dumps(secrets, indent=4)
 
 #menu of for flipper experience
 with st.sidebar:
