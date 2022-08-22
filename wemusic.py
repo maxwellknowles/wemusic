@@ -36,13 +36,7 @@ if choose == "MeProfile":
     user_email = st.text_input("Enter email to sign in or create account")
     if user_email:
         scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-        try:
-            credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
-        except OSError as exc:
-            if exc.errno == 36:
-                pass
-            else:
-                raise
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
         gc = gspread.authorize(credentials)
         sheet = gc.open('WeMusic')
         sheet_instance = sheet.get_worksheet(0)
@@ -169,13 +163,7 @@ if choose == "WeArtists":
     st.write("Partner up with other small artists you dig and promote each other's work: __*co-promotion*__ as a substitute for algorithmic placement!")
     st.write("Just imagine — 3 artists with 1000 followers gives each of them 2000 new people to reach! We just have to work together.")
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-    try:
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
-    except OSError as exc:
-        if exc.errno == 36:
-            pass
-        else:
-            raise
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(google_key_file, scope)
     gc = gspread.authorize(credentials)
     sheet = gc.open('WeMusic')
     sheet_instance = sheet.get_worksheet(0)
