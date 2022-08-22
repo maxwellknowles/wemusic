@@ -209,7 +209,10 @@ if choose == "WeArtists":
         col1, col2 = st.columns([1,3], gap="medium")
 
         with col1:
-            st.image(profiles_filter['photo'][i])
+            if profiles_filter['photo'][i]==None:
+                pass
+            else:
+                st.image(profiles_filter['photo'][i])
             st.write(profiles_filter['artist_name'][i])
         with col2:
                 with st.expander("Profile: "+profiles_filter['artist_name'][i]):
