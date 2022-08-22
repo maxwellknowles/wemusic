@@ -33,7 +33,7 @@ with st.sidebar:
     }
     )
 
-genres_list = ["None","Indie","Alternative","Hip Hop","Rock","Pop","Jazz","Country"]
+genres_list = ["None","Indie","Alternative","Hip Hop","Rock","Pop","Jazz","Country","Folk","Gospel","EDM","Instrumental"]
 
 if choose == "MeProfile":
     st.header("MeProfile")
