@@ -115,10 +115,10 @@ if choose == "MeProfile":
                 st.success("Congrats! You may sign in now at https://maxwellknowles-wemusic-wemusic-hz9pvc.streamlitapp.com/#meprofile")
                 user_email = user_email
                 
-        if st.checkbox("Sign In"):
+    if st.checkbox("Sign In"):
 
-            user_email = st.text_input("Enter email to sign in or create account", key=3000)
-            password = st.text_input("Enter password", key=3000)
+        user_email = st.text_input("Enter email to sign in or create account", key=3000)
+        password = st.text_input("Enter password", key=3000)
 
         if user_email and password:
 
