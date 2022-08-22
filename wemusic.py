@@ -14,8 +14,6 @@ import json
 st.set_page_config(page_title="Dome Flipper Experience", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
 #convert toml secret to json for gcp service account key
-secrets = st.secrets["google_key_file"]
-google_key_file = json.dumps(secrets, indent=4)
 spreadsheet_key = st.secrets["spreadsheet_key"]
 
 #menu of for flipper experience
@@ -92,6 +90,8 @@ if choose == "MeProfile":
 
             if st.button("Finish"):
                 wks_name1 = 'profiles'
+                scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+                credentials = service_account.Credentials.from_service_account_info(st.secrets["google_key_file"], scopes=scope,)
                 d2g.upload(profiles, spreadsheet_key, wks_name1, credentials=credentials, row_names=False)
                 st.success("Congrats! You may sign in now at http://localhost:8501/#meprofile")
                 user_email = user_email
