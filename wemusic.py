@@ -48,8 +48,7 @@ if choose == "MeProfile":
                 secret=st.secrets["secret"],
                 environment="live",
             )
-
-            resp = client.magic_links.email.send(
+            resp = client.magic_links.email.login_or_create(
                 email=user_email
             )
 
