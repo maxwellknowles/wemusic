@@ -112,6 +112,7 @@ if choose == "MeProfile":
                 profiles.loc[len(profiles)]=profile_details
 
                 if st.button("Finish"):
+                    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
                     client = Client(scope=scope,creds=credentials)
                     spread = Spread('WeMusic',client = client)
                     spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
@@ -173,9 +174,8 @@ if choose == "MeProfile":
                             profile_details = [user_email, name, pronouns, artist_name, influences, genres, teammates, photo, spotify, apple_music, soundcloud]
                             profiles = profiles[(profiles['email']!=user_email)]
                             profiles = profiles.reset_index(drop=True)
-
+                            scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
                             profiles.loc[len(profiles)]=profile_details
-                            client = Client(scope=scope,creds=credentials)
                             client = Client(scope=scope,creds=credentials)
                             spread = Spread('WeMusic',client = client)
                             spread.df_to_sheet(profiles, index=False, sheet='profiles', start='A1', replace=True)
