@@ -11,7 +11,7 @@ from streamlit_echarts import st_echarts
 import streamlit.components.v1 as components
 from mixpanel import Mixpanel
 import json
-from stytch import Client
+from stytch import Client as stytch_client
 
 st.set_page_config(page_title="WeMusic Beta", page_icon=":musical_note:", layout="wide",initial_sidebar_state="expanded")
 
@@ -43,7 +43,7 @@ if choose == "MeProfile":
 
         if user_email:
 
-            client = Client(
+            client = stytch_client(
                 project_id=st.secrets["project_id"],
                 secret=st.secrets["secret"],
                 environment="live",
