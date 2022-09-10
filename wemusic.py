@@ -128,7 +128,7 @@ if choose == "MeProfile":
                 col1, col2 = st.columns(2)
                 with col1:
                     st.write("__About You__")
-                    spotify_link = profiles_select['spotify'][i]
+                    spotify_link = profiles_select['spotify'][0]
                     try:
                         artist = sp.artist(spotify_link)
                         st.image(artist['images'][1]['url'])
